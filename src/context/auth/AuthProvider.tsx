@@ -80,6 +80,7 @@ export const AuthProvider: FC<Props> = ({children}) => {
     const signUp = async (data:Register) => {
         try {
             
+            dispatch({type: '[Auth] - Checking'})
             const resp = await tweeterApi.post<AuthResponse>('/login/new',data)
             console.log(resp.data);
             dispatch({type: '[Auth] - Register', payload: {
@@ -102,7 +103,7 @@ export const AuthProvider: FC<Props> = ({children}) => {
     const signIn = async (data:Login) => {
 
         try {
-            
+            dispatch({type: '[Auth] - Checking'})
             const resp = await tweeterApi.post<AuthResponse>('/login',data)
             console.log(resp.data);
             dispatch({type: '[Auth] - Login', payload: {

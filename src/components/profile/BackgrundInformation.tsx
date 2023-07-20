@@ -4,10 +4,11 @@ import Icon  from 'react-native-vector-icons/Ionicons'
 import { User } from '../../interface/authInterface';
 
 interface Prosp {
-    user: User
+    user: User,
+    openModal: (value: boolean) => void,
 }
 
-const BackgrundInformation = ({user}:Prosp) => {
+const BackgrundInformation = ({user,openModal}:Prosp) => {
   return (
     <View style={{position: 'relative'}}>
         <View
@@ -97,27 +98,37 @@ const BackgrundInformation = ({user}:Prosp) => {
                         flexDirection: 'row',
                         gap: 30
                     }}>
-                        <Text style={{
-                            fontSize: 15,
-                            fontWeight: '400',
-                            color: '#828282',
-                        }}>
-                            <Text 
-                                style={{
-                                    fontWeight: 'bold',
-                                    color: 'black'
-                                }}>{user?.nfollowing}  
-                                
-                            </Text> Following
-                        </Text>
-                        <Text style={{
-                            fontSize: 15,
-                            fontWeight: '400',
-                            color: '#828282',
-                        }}><Text style={{
-                            fontWeight: 'bold',
-                            color: 'black'
-                        }}>{user?.nfollowers}</Text> Followers</Text>
+                        <TouchableOpacity
+                            onPress={()=>openModal(true)}
+                        >
+                            <Text style={{
+                                fontSize: 15,
+                                fontWeight: '400',
+                                color: '#828282',
+                                textDecorationLine: 'underline'
+                            }}>
+                                <Text 
+                                    style={{
+                                        fontWeight: 'bold',
+                                        color: 'black'
+                                    }}>{user?.nfollowing}  
+                                    
+                                </Text> Following
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={()=>openModal(true)}
+                        >
+                            <Text style={{
+                                fontSize: 15,
+                                fontWeight: '400',
+                                color: '#828282',
+                                textDecorationLine: 'underline'
+                            }}><Text style={{
+                                fontWeight: 'bold',
+                                color: 'black'
+                            }}>{user?.nfollowers}</Text> Followers</Text>
+                        </TouchableOpacity>
                     </View>
 
                     <Text>{user?.bio}</Text>

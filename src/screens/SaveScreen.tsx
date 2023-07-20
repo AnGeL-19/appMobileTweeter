@@ -42,7 +42,7 @@ const SaveScreen = () => {
       <View style={{marginTop: 80}}></View>
       <FilterTweets filters={filter} />
 
-      <Posts />
+      {/* <Posts /> */}
 
       </ScrollView>
     </View>

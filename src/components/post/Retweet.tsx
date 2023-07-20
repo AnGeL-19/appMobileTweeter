@@ -2,11 +2,15 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const Retweet = () => {
+interface Props{
+  username: string;
+}
+
+const Retweet = ({username}:Props) => {
   return (
     <View style={styles.container}>
         <Icon name='refresh-outline' size={20}/>
-        <Text style={styles.text}>retweet angel</Text>
+        <Text style={styles.text}>{username}</Text>
     </View>
   )
 }

@@ -18,17 +18,17 @@ export interface Register extends Login{
 export interface User {
     uid:               string;
     name:              string;
-    email:             string;
-    bio:               string;
+    email?:             string;
+    bio?:               string;
     imgUser:           string;
-    imgUserBackground: string;
-    loginGoogle:       boolean;
-    posts:             string[];
-    retweets:          string[];
-    saved:             string[];
-    likes:             string[];
-    followers:         string[];
-    following:         string[];
-    nfollowers:        number;
-    nfollowing:        number;
+    imgUserBackground?: string;
+    loginGoogle?:       boolean;
+    posts?:             string[];
+    retweets?:          string[];
+    saved?:             string[];
+    likes?:             string[];
+    followers?:         string[];
+    following?:         string[];
+    nfollowers?:        number;
+    nfollowing?:        number;
 }

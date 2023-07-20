@@ -96,7 +96,7 @@ const ExploreScreen = () => {
 
       <FilterTweets filters={filter} />
 
-      <Posts />
+      {/* <Posts /> */}
 
 
       </ScrollView>

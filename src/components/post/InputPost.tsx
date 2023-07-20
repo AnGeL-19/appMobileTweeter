@@ -1,15 +1,19 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import Profile from '../Profile';
+import { AuthContext } from '../../context/auth/AuthProvider';
 
 const InputPost = () => {
+
+    const { user } = useContext(AuthContext)
+
   return (
     <View
         style={styles.container}
     >
         
-        <Profile onlyImage  />
+        <Profile user={user!} onlyImage  />
 
         <View style={styles.containerInput}>
             <TextInput 

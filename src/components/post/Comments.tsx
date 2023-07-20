@@ -1,8 +1,14 @@
 import React from 'react'
 import { View } from 'react-native'
 import Comment from './Comment'
+import { ComentPerson } from '../../interface/postInterface';
+import { FlatList } from 'react-native-gesture-handler';
 
-const Comments = () => {
+interface Props{
+  comments: ComentPerson[];
+}
+
+const Comments = ({comments}:Props) => {
   return (
     <View
         style={{
@@ -13,8 +19,14 @@ const Comments = () => {
             paddingTop: 15
         }}
     >
+      {/* USAR FLATLIST */}
         {/* comment */}
-        <Comment/>
+        <FlatList
+          data={comments}
+          keyExtractor={(item)=>item.cid}
+          renderItem={({item})=> <Comment comment={item} /> }
+        />
+
 
     </View>
   )

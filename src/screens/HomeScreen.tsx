@@ -1,15 +1,34 @@
-import React, { useContext } from 'react'
-import { View, Text, Button, ScrollView, TextInput, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { AuthContext } from '../context/auth/AuthProvider';
+import React, { useEffect, useState } from 'react'
+import { View, ScrollView } from 'react-native';
 import Header from '../components/Header';
-import Profile from '../components/Profile';
 import CreateTweet from '../components/CreateTweet';
 import Posts from '../components/post/Posts';
+import { IPost, PostsResponse } from '../interface/postInterface';
+import tweeterApi from '../api/apiTweeter';
 
 const HomeScreen = () => {
 
-  const { user } = useContext(AuthContext)
+  
+  const [data, setdata] = useState<IPost[]>([])
+
+    async function getTweets(){
+        try {
+            const resp = await tweeterApi.get<PostsResponse>('tweets/')
+            console.log(resp.data.data);
+            setdata(resp.data.data)
+        } catch (error) {
+            console.log(error);
+            
+        }
+        
+        
+    }
+
+    useEffect(()=>{
+      getTweets()
+      console.log('entraaaaa');
+      
+    },[])
 
   return (
     <View>
@@ -21,7 +40,8 @@ const HomeScreen = () => {
         
         <CreateTweet />
 
-        <Posts />
+        <Posts posts={data} />
+        
       </ScrollView>
     </View>
   )

@@ -1,20 +1,24 @@
 import React from 'react'
 import { Image, StyleSheet, Text, View } from 'react-native'
 import { User } from '../interface/authInterface'
+import { IUserProfile } from '../interface/postInterface'
 
 interface Props{
-    user?: User,
+    user: IUserProfile | User,
     onlyImage?: boolean
 }
 
 const Profile = ({user, onlyImage}:Props) => {
+    
+    console.log('profile', '------------');
+
   return (
     <View style={styles.container}>
         <View style={styles.containerImage}>
             <Image 
             style={styles.image}
             source={{
-                uri: 'https://i.pinimg.com/564x/18/22/6d/18226d06993245cff431a4d8177249c0.jpg'
+                uri: user?.imgUser
             }} />
         </View>
         {
@@ -22,7 +26,7 @@ const Profile = ({user, onlyImage}:Props) => {
             &&
             <View style={styles.containerInfo}>
                 <Text style={styles.username}>
-                    Angel Muñoz
+                    {user.name}
                 </Text>
                 <Text style={styles.info}>
                     25 Agust at 2023

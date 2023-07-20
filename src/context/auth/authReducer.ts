@@ -10,6 +10,7 @@ type AuthActionType =
 | { type: '[Auth] - Add Error', payload: string}
 | { type: '[Auth] - Remove Error'}
 | { type: '[Auth] - NotAuthenticated'}
+| { type: '[Auth] - Checking'}
 
 export const AuthReducer = (state: AuthState, action: AuthActionType): AuthState => {
     switch (action.type) {
@@ -43,6 +44,11 @@ export const AuthReducer = (state: AuthState, action: AuthActionType): AuthState
             return {
                 ...state,
                 errorMessage: '',
+            }
+        case '[Auth] - Checking':
+            return {
+                ...state,
+                status: 'checking'
             }
         default:
             return state;

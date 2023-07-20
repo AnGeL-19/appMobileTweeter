@@ -1,12 +1,17 @@
-import React, {useState} from 'react'
+import React, {useMemo, useState} from 'react'
 import { Text, TextInput, TouchableOpacity, View } from 'react-native'
 import Profile from './Profile'
 import Icon from 'react-native-vector-icons/Ionicons';
 import StatusTweet from './StatusTweet';
+import { useContext } from 'react';
+import { AuthContext } from '../context/auth/AuthProvider';
 
 const CreateTweet = () => {
 
+    const { user } = useContext(AuthContext)
     const [showTweetPrivate, setShowTweetPrivate] = useState(false)
+
+    console.log('create tweet', '------------');
 
   return (
     <View style={{
@@ -41,7 +46,7 @@ const CreateTweet = () => {
             borderTopWidth: 1,
             borderColor: '#F2F2F2',
             }}>
-            <Profile onlyImage />
+            <Profile user={user!} onlyImage />
             <View style={{
                 flex: 1
             }}>

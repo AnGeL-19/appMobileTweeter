@@ -1,21 +1,31 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { FlatList, Text, View } from 'react-native'
 import Post from './Post';
+import { IPost } from '../../interface/postInterface';
 
-const Posts = () => {
+interface Props{
+    posts: IPost[];
+}
 
-    const posts = [0,1,2,3,4]
+const Posts = ({posts}:Props) => {
+
+    console.log('entra', '------------');
+    
 
   return (
     <View style={{
         flexDirection: 'column',
         gap: 20
     }}>
-        {
-            posts.map(post => (
-                <Post key={post} />
-            ))
-        }
+        {/* CAMBIAR A FLATLIST */}
+        <FlatList
+            data={posts}
+            keyExtractor={(item)=>item.tid}
+            renderItem={({item})=> <Post post={item} />}
+            ItemSeparatorComponent={()=>(
+                <View style={{padding:10}}></View>
+            )}
+        />
     </View>          
   )
 }

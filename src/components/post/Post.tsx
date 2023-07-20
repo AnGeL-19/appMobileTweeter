@@ -1,5 +1,5 @@
 import React from 'react'
-import {  View,  KeyboardAvoidingView, Platform } from 'react-native';
+import {  View,  KeyboardAvoidingView, Platform, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Retweet from './Retweet';
 import Profile from '../Profile';
@@ -8,9 +8,13 @@ import DetailPost from './DetailPost';
 import Comments from './Comments';
 import PostActions from './PostActions';
 import InputPost from './InputPost';
+import { IPost } from '../../interface/postInterface';
 
-const Post = () => {
+interface Props{
+    post: IPost
+}
 
+const Post = ({post}:Props) => {
 
   return (
     <View style={{
@@ -21,7 +25,14 @@ const Post = () => {
         {/* Tweet */}
         <View>
             {/* retweet */}
-            <Retweet />
+            {
+                post?.userRetweet
+                &&
+                (
+                <Retweet username={post.userRetweet} />
+                )
+            }
+           
 
             {/* info tweet - photo, description, interections */}
             <View 
@@ -34,17 +45,40 @@ const Post = () => {
 
                 {/* profile */}
                 <View style={{
-                    marginBottom: 10
+                    marginBottom: 10,
                 }}>
-                    <Profile  />
+                    <Profile user={post.userTweet}  />
                 </View>
                 
+                <View
+                    style={{
+                        paddingVertical: 10
+                    }}
+                >
+                    <Text style={{
+                        fontSize: 16,
+                        fontWeight: '600'
+                    }}>
+                        {post.description}
+                    </Text>
+                </View>
 
                 {/* image */}
-                <ImagePost />
+                {
+                    post.imgTweet
+                    &&
+                    (
+                        <ImagePost imagePost={post.imgTweet} />
+                    )
+                }
+                
 
                 {/* caracteristics post */}
-                <DetailPost />
+                <DetailPost 
+                    comments={post.nComentPeople} 
+                    retweets={post.nRetweets}
+                    saved={post.nSaved}
+                />
 
                 {/* interactive */}
                 <PostActions />
@@ -53,7 +87,12 @@ const Post = () => {
                 <InputPost />
                 
                 {/* comments */}
-                <Comments />
+                {
+                    post.comentPeople.length > 0
+                    &&
+                    <Comments comments={post.comentPeople}/>
+                }
+                
             </View>
 
         </View>

@@ -1,12 +1,18 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
-const DetailPost = () => {
+interface Props{
+  comments: number;
+  retweets: number;
+  saved: number;
+}
+
+const DetailPost = ({comments, retweets, saved}:Props) => {
   return (
     <View style={styles.container}>
-        <Text>499 comments</Text>
-        <Text>24k Retweets</Text>
-        <Text>243 Saved</Text>
+        <Text>{comments} comments</Text>
+        <Text>{retweets} Retweets</Text>
+        <Text>{saved} Saved</Text>
     </View>
   )
 }
