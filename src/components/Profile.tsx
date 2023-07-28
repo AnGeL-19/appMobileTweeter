@@ -1,39 +1,57 @@
 import React from 'react'
 import { Image, StyleSheet, Text, View } from 'react-native'
 import { User } from '../interface/authInterface'
-import { IUserProfile } from '../interface/postInterface'
+import { Link } from '@react-navigation/native';
+import { dateFormat } from '../helpers/dateFormat';
 
 interface Props{
-    user: IUserProfile | User,
-    onlyImage?: boolean
+    user: User,
+    onlyImage?: boolean,
+    showFollow?: boolean,
+    dateTweet?: string
 }
 
-const Profile = ({user, onlyImage}:Props) => {
+const Profile = ({user, onlyImage, showFollow, dateTweet}:Props) => {
     
     console.log('profile', '------------');
 
   return (
-    <View style={styles.container}>
-        <View style={styles.containerImage}>
-            <Image 
-            style={styles.image}
-            source={{
-                uri: user?.imgUser
-            }} />
-        </View>
-        {
-            !onlyImage
-            &&
-            <View style={styles.containerInfo}>
-                <Text style={styles.username}>
-                    {user.name}
-                </Text>
-                <Text style={styles.info}>
-                    25 Agust at 2023
-                </Text>
-            </View>
-        }
+    <View >
+        <Link to={{
+            screen: 'ProfileScreen',
+            params: {id: user.uid}
+        }}
         
+        >
+        <View style={styles.container}>
+
+            <View style={styles.containerImage}>
+                
+                    <Image 
+                        style={styles.image}
+                        source={{
+                            uri: user?.imgUser
+                        }} />
+                
+            </View>
+            {
+                !onlyImage
+                &&
+                <View style={styles.containerInfo}>
+                    <Text style={styles.username}>
+                        {user.name}
+                    </Text>
+                    <Text style={styles.info}>
+                        {
+                            showFollow 
+                            ? `${user.followers?.length} ${user.followers!.length > 1 ? 'followers': 'follower'}` 
+                            : dateFormat(dateTweet!)
+                        }
+                    </Text>
+                </View>
+            }
+        </View>
+        </Link>
     </View>
   )
 }

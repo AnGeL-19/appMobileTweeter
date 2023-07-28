@@ -1,14 +1,48 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import Profile from '../Profile';
 import { ComentPerson } from '../../interface/postInterface';
+import { usePostActions } from '../../hooks/usePostActions';
+import { AuthContext } from '../../context/auth/AuthProvider';
 
 interface Props{
     comment: ComentPerson
 }
 
 const Comment = ({comment}:Props) => {
+
+    const { user } = useContext(AuthContext)
+    const { actionTweet, data, isLoading } = usePostActions()
+    const [commentTweet, setCommentTweet] = useState(comment)
+
+    const handleLike = () => {
+
+        console.log('loked');
+
+        actionTweet('likeCmmt',{idComment: comment.cid})       
+        
+        if (!data.ok) return;
+
+        const isUser = commentTweet.likes.find( idUser => idUser === user?.uid )
+
+        let userLiked: string[] = []
+        if (isUser) {
+            userLiked = commentTweet.likes.filter( idUser => idUser !== user?.uid)
+        }else{
+            userLiked = [...commentTweet.likes, user?.uid!]
+        }
+
+        const likeUnlike = {
+            ...commentTweet,
+            likes: userLiked,
+            nLikes: userLiked.length
+        }
+
+        setCommentTweet(likeUnlike)
+       
+    }
+
   return (
     <View style={styles.container}>
         {/* image profile */}
@@ -30,12 +64,22 @@ const Comment = ({comment}:Props) => {
             <View style={styles.containerLikes}>
                 <TouchableOpacity
                     style={styles.btnLike}
+                    onPress={ handleLike }
                 >
-                    <Icon name="heart-outline" size={15} />
-                    <Text>Liked</Text>
+                    <Icon 
+                    name={ commentTweet.likes.find( idUser => idUser === user?.uid) ? 'heart' : 'heart-outline'}
+                    size={20} style={{
+                        fontWeight: 'bold',
+                    }} 
+                    color={ commentTweet.likes.find( idUser => idUser === user?.uid) ? '#EB5757' : 'grey' } />
+                    <Text style={{ color: commentTweet.likes.find( idUser => idUser === user?.uid) ? '#EB5757' : 'grey' }}>
+                        { commentTweet.likes.find( idUser => idUser === user?.uid) ? 'Liked' : 'Like' }
+                    </Text>
                 </TouchableOpacity>
                 <View>
-                    <Text>{comment.nLikes} Likes</Text>
+                    <Text>
+                        {commentTweet.nLikes} {commentTweet.nLikes > 1 ? 'Likes': 'Like'}
+                    </Text>
                 </View>
             </View>
         </View>
@@ -80,11 +124,13 @@ const styles = StyleSheet.create({
     },
     containerLikes: {
         flexDirection: 'row',
+        alignItems: 'center',
         gap: 15
     },
     btnLike: {  
         flexDirection: 'row',
         alignItems: 'center',
+    
         gap: 5   
     },
 

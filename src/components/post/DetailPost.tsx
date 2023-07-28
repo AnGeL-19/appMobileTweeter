@@ -5,13 +5,15 @@ interface Props{
   comments: number;
   retweets: number;
   saved: number;
+  likes: number;
 }
 
-const DetailPost = ({comments, retweets, saved}:Props) => {
+const DetailPost = ({ likes ,comments, retweets, saved}:Props) => {
   return (
     <View style={styles.container}>
         <Text>{comments} comments</Text>
         <Text>{retweets} Retweets</Text>
+        <Text>{likes} Likes</Text>
         <Text>{saved} Saved</Text>
     </View>
   )

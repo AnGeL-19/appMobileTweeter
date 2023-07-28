@@ -2,8 +2,38 @@ import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import Profile from '../Profile'
 import Icon from 'react-native-vector-icons/Ionicons';
+import { User } from '../../interface/authInterface';
+import { IUserFollow } from '../../interface/followInterface';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/auth/AuthProvider';
+import tweeterApi from '../../api/apiTweeter';
 
-const UsersFollow = () => {
+interface Props{
+    user: IUserFollow,
+    following?: boolean;
+}
+
+const UsersFollow = ({user,following}:Props) => {
+
+    const {user: userAuth, followUnfollow } = useContext(AuthContext)
+
+    const handleFollowUnFollow = async (id: string) => {
+
+        try {
+
+            const resp = await tweeterApi.put(`user/followUnfollow/${id}`)
+            console.log(resp.data);
+            if (resp.data.ok) {
+                followUnfollow(id)
+            }
+        } catch (error) {
+            console.log(error);
+            
+        }
+        
+
+    }
+
   return (
     <View style={{
         borderTopWidth: 2,
@@ -17,8 +47,9 @@ const UsersFollow = () => {
             flexDirection: 'row',
             justifyContent: 'space-between'
         }}>
-            <Profile/>
+            <Profile user={user} showFollow />
             <TouchableOpacity
+                onPress={()=>handleFollowUnFollow(user.uid)}
                 style={{
                     flexDirection: 'row',
                     justifyContent: 'center',
@@ -31,31 +62,45 @@ const UsersFollow = () => {
                     borderRadius: 5
                 }}
             >
-                <Icon name='person-add-outline' size={15} color='white' />
+                {
+
+                    userAuth?.following?.find(f => f === user.uid)
+                    ? <Icon name='person-remove-outline' size={15} color='white' />
+                    : <Icon name='person-add-outline' size={15} color='white' />
+
+                }
+                
                 <Text style={{
                     textAlign: 'center',
                     color: 'white'
-                }}>Following</Text>
+                }}>
+                    {
+
+                        userAuth?.following?.find(f => f === user.uid)
+                        ? 'Following'
+                        : 'Follow'
+                                        
+                    }
+                </Text>
             </TouchableOpacity>
         </View>
-        <View>
-            <Text 
-                ellipsizeMode="tail"
-                numberOfLines={5}
-                style={{
-                fontWeight: '500',
-            }}>
-                Follow me on IG: @arstyy
-                Follow me on IG: @arstyy
-                Follow me on IG: @arstyy
-                Follow me on IG: @arstyy
-                Follow me on IG: @arstyy
-                Follow me on IG: @arstyy
-                Follow me on IG: @arstyy
-                Follow me on IG: @arstyy
-                Follow me on IG: @arstyy
-            </Text>
-        </View>
+        {
+            user.bio
+            &&
+            (
+            <View>
+                <Text 
+                    ellipsizeMode="tail"
+                    numberOfLines={5}
+                    style={{
+                    fontWeight: '500',
+                }}>
+                    {user.bio}
+                </Text>
+            </View>
+            )
+        }
+        
 
     </View>
   )

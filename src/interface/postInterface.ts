@@ -41,3 +41,19 @@ export interface IUserProfile {
     imgUser: string;
     uid:     string;
 }
+
+export interface IDetailPost {
+    likes: string[];
+    nLikes: number;
+    comments: ComentPerson[];
+    nComments: number;
+    retweet: string[];
+    nRetweets: number;
+    saved: string[];
+    nSaved: number;
+}
+
+export interface ActionResponse{
+    msg: string;
+    ok: boolean;
+}

@@ -1,14 +1,46 @@
-import React, { useState } from 'react'
-import { Modal,Pressable,ScrollView,StyleSheet,Text,View } from 'react-native';
+import React, { useState, useEffect } from 'react'
+import { Modal,Pressable,ScrollView,StyleSheet,Text,View,FlatList, ActivityIndicator } from 'react-native';
 import Icon  from 'react-native-vector-icons/Ionicons';
 import UsersFollow from './UsersFollow';
+import tweeterApi from '../../api/apiTweeter';
+import { FollowResponse, IUserFollow } from '../../interface/followInterface';
+
 
 interface Props{
     modalVisible: boolean,
     setModalVisible: (value: boolean) => void;
+    follow: {follow: string, name: string, username: string};
 }
 
-const ModalUsers = ({modalVisible, setModalVisible}:Props) => {
+const ModalUsers = ({modalVisible, setModalVisible, follow}:Props) => {
+
+  const [isLoding, setIsLoding] = useState(true)
+  const [data, setData] = useState<IUserFollow[]>([])
+  console.log(follow);
+  // https://app-tweet-backend-production.up.railway.app/api/user/followers/641a68dd8db1946fba68252b
+  
+  async function getUsers(){
+    try {
+        setIsLoding(true)
+        const resp = await tweeterApi.get<FollowResponse>(`user/${follow.follow}`)
+        console.log(resp.data);
+        setData(resp.data.data)
+        setIsLoding(false)
+    } catch (error) {
+        console.log(error);
+        
+    }
+    
+    
+  }
+
+  useEffect(()=>{
+    getUsers()
+    return () => {
+      setData([])
+    }
+  },[follow])
+
 
   return (
     <>
@@ -33,7 +65,7 @@ const ModalUsers = ({modalVisible, setModalVisible}:Props) => {
                     alignItems: 'center'
                 }}
             >
-                <Text style={styles.modalText}>Daniel Jensen is following</Text>
+                <Text style={styles.modalText}>{follow.username} is {follow.name}</Text>
                 <Pressable
                     style={styles.button}
                     onPress={() => setModalVisible(!modalVisible)}>
@@ -41,21 +73,19 @@ const ModalUsers = ({modalVisible, setModalVisible}:Props) => {
                 </Pressable>
             </View>
             
-            <ScrollView 
-              showsVerticalScrollIndicator={false}
-              style={{
-                flexDirection: 'column',
-                gap: 10
-              }}
-            >
+                {
+                  isLoding
+                  ? <ActivityIndicator size='large' color='black'/>
+                  : <FlatList 
+                      data={data}
+                      keyExtractor={(item)=>item.uid}
+                      renderItem={({item})=><UsersFollow user={item} following={ follow.name === 'Followings' } />}
+                      ItemSeparatorComponent={()=>(<View style={{padding:5}}></View>)}
+                      showsVerticalScrollIndicator={false}
+                    />
+                }
                 
-                {/* Flat List */}
-                <UsersFollow />
-                <UsersFollow />
-                <UsersFollow />
-                <UsersFollow />
 
-            </ScrollView>
 
           </View>
         </View>

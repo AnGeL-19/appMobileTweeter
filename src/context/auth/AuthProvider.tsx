@@ -15,6 +15,7 @@ interface ContextProps{
     signIn: (data:Login) => void;
     signOut: () => void;
     removeError: () => void;
+    followUnfollow: (id: string) => void;
 }
 
 export const AuthContext = createContext({} as ContextProps);
@@ -133,6 +134,42 @@ export const AuthProvider: FC<Props> = ({children}) => {
         dispatch({type: '[Auth] - Remove Error'})
     }
 
+    const followUnfollow = (id: string) => {
+
+        const userState = Object.assign({},state.user)
+
+        const isFolling = userState.following?.find(follow => follow === id)
+        // let newUser = {}
+        if(isFolling){
+            const follow = userState?.following?.filter(follow => follow !== id)
+            const newUser = {
+                ...userState,
+                following: follow,
+                nfollowing: follow?.length
+            }
+            dispatch({
+                type: '[User] - Follow - Unfollow', 
+                payload: {
+                    user: newUser
+                } 
+            })
+        }else{
+            const newUser = {
+                ...userState,
+                following: userState.following?.concat(id),
+                nfollowing: (userState.following?.length || 0) + 1
+            }
+            dispatch({
+                type: '[User] - Follow - Unfollow', 
+                payload: {
+                    user: newUser
+                } 
+            })
+        }
+       
+
+    }
+
 return (
    <AuthContext.Provider value={{
         ...state,
@@ -140,6 +177,7 @@ return (
         signIn,
         signOut,
         removeError,
+        followUnfollow
    }}>
        { children }
   </AuthContext.Provider>

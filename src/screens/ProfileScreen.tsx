@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
-import {  ScrollView, View } from 'react-native'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import {  ActivityIndicator, ScrollView, View } from 'react-native'
 import Header from '../components/Header'
 import { AuthContext } from '../context/auth/AuthProvider'
 import BackgrundInformation from '../components/profile/BackgrundInformation'
@@ -8,29 +8,42 @@ import Posts from '../components/post/Posts'
 import ModalUsers from '../components/modal/ModalUsers'
 import tweeterApi from '../api/apiTweeter'
 import { IPost, PostsResponse } from '../interface/postInterface'
+import { AuthResponse, User } from '../interface/authInterface'
+import { StackScreenProps } from '@react-navigation/stack'
+import { ProductsStackParams } from '../navigator/tabs/Tab'
+import { usePost } from '../hooks/usePost'
+import { useUser } from '../hooks/useUser'
 
-const ProfileScreen = () => {
+interface Props extends StackScreenProps<ProductsStackParams, 'ProfileScreen'>{};
 
-    const { user } = useContext(AuthContext)
+const ProfileScreen = ({route}:Props) => {
+
+    const { user: userAuth } = useContext(AuthContext)
+
+    const { data, getTweets, isLoading } = usePost()
+    const { user: user, isLoading: isLoadingUser, getUser, setUserData } = useUser(userAuth!)
+    
+
     const [modalVisible, setModalVisible] = useState(false)
-    const [data, setdata] = useState<IPost[]>([])
+    const [follow, setFollow] = useState<{follow: string, name: string, username: string}>({
+        follow: '',
+        name: '',
+        username: '',
+    })
+ 
 
-    async function getTweets(){
-        try {
-            const resp = await tweeterApi.get<PostsResponse>(`tweets/${user?.uid}`)
-            console.log(resp.data.data);
-            setdata(resp.data.data)
-        } catch (error) {
-            console.log(error);
-            
-        }
-        
-        
-    }
+    // https://app-tweet-backend-production.up.railway.app/api/user/followers/641a68dd8db1946fba68252b
 
     useEffect(()=>{
-        getTweets()
-    },[])
+        
+        if (route.params?.id && route.params?.id !== user?.uid) {
+            getUser(route.params?.id)
+            getTweets(route.params?.id)
+        }else{
+            setUserData(userAuth!)
+            getTweets(userAuth?.uid!)
+        }
+    },[route.params?.id])
 
     const filter = [
         {
@@ -62,14 +75,25 @@ const ProfileScreen = () => {
             showsVerticalScrollIndicator={false}
         >
             <View style={{marginTop: 70}}></View>
-            <BackgrundInformation user={user!} openModal={setModalVisible} />
+            
+            {
+                isLoadingUser
+                ? <ActivityIndicator size={'large'} color={'black'}/>
+                : <BackgrundInformation user={user!} openModal={setModalVisible} typeFollow={setFollow} />
+
+            }
 
             <FilterTweets filters={filter} />
 
-            <Posts posts={data} />
+            {
+                isLoading
+                ? <ActivityIndicator size={'large'} color={'black'}/>
+                : <Posts posts={data} />
+            }
+            
             
         </ScrollView>
-        <ModalUsers modalVisible={modalVisible} setModalVisible={setModalVisible} />
+        <ModalUsers follow={follow} modalVisible={modalVisible} setModalVisible={setModalVisible} />
     </View>
   )
 }

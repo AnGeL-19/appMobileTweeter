@@ -6,7 +6,14 @@ import SaveScreen from '../../screens/SaveScreen';
 import ExploreScreen from '../../screens/ExploreScreen';
 import ProfileScreen from '../../screens/ProfileScreen';
 
-const Tab = createBottomTabNavigator();
+export type ProductsStackParams = {
+  HomeScreen: undefined,
+  ExploreScreen: undefined,
+  SaveScreen: undefined,
+  ProfileScreen: { id?: string }
+}
+
+const Tab = createBottomTabNavigator<ProductsStackParams>();
 
 function MyTabs() {
   return (

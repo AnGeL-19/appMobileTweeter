@@ -3,10 +3,38 @@ import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import Profile from '../Profile';
 import { AuthContext } from '../../context/auth/AuthProvider';
+import { useForm } from '../../hooks/useForm';
+import tweeterApi from '../../api/apiTweeter';
+import Comments from './Comments';
 
-const InputPost = () => {
+interface Props{
+    idTweet: string;
+}
+// {valueComment, onChange}:Props
+const InputPost = ({idTweet}:Props) => {
 
     const { user } = useContext(AuthContext)
+    const { comment, onChange } = useForm({comment: ''})
+
+    const handleSubmit = async() => {
+
+        console.log(comment);
+    
+        try {
+            
+            const resp = await tweeterApi.post(`tweet/msg`, {
+                idTweet,
+                comment
+            })
+            console.log(resp.data);
+            onChange('',"comment")
+            
+        } catch (error) {
+            console.log(error.response.data);
+            
+        }
+    }
+
 
   return (
     <View
@@ -19,8 +47,23 @@ const InputPost = () => {
             <TextInput 
                 style={styles.inputText}
                 placeholder="Tweet your reply" 
-                
+                onChangeText={(value)=>onChange(value,'comment')}
+                value={comment}
             />
+            
+            {
+                (comment.trim().length > 2)
+                &&
+                <TouchableOpacity 
+                onPress={handleSubmit}
+                style={{
+                    ...styles.btnSend,
+                }} >
+                    <Icon name="send-outline" size={20} color='#2F80ED'/>
+                </TouchableOpacity>
+            }
+            
+
             <TouchableOpacity style={
                 styles.btnGallery
             } >
@@ -47,7 +90,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#F2F2F2',
         borderRadius: 5,
         paddingLeft: 10,
-        paddingRight: 45
+        paddingRight: 80
+    },
+    btnSend: {
+        position: 'absolute',
+        right: 35,
+        padding: 10
     },
     btnGallery: {
         position: 'absolute',

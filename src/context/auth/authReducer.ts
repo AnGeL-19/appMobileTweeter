@@ -11,6 +11,7 @@ type AuthActionType =
 | { type: '[Auth] - Remove Error'}
 | { type: '[Auth] - NotAuthenticated'}
 | { type: '[Auth] - Checking'}
+| { type: '[User] - Follow - Unfollow', payload: {user: User | null}}
 
 export const AuthReducer = (state: AuthState, action: AuthActionType): AuthState => {
     switch (action.type) {
@@ -49,6 +50,11 @@ export const AuthReducer = (state: AuthState, action: AuthActionType): AuthState
             return {
                 ...state,
                 status: 'checking'
+            }
+        case '[User] - Follow - Unfollow':
+            return {
+                ...state,
+                user: action.payload.user
             }
         default:
             return state;

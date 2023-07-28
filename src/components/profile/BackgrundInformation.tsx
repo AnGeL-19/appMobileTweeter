@@ -6,9 +6,31 @@ import { User } from '../../interface/authInterface';
 interface Prosp {
     user: User,
     openModal: (value: boolean) => void,
+    typeFollow: (value: {follow: string, name: string, username: string}) => void;
+    disableBtnFollow?: boolean;
 }
 
-const BackgrundInformation = ({user,openModal}:Prosp) => {
+const BackgrundInformation = ({user,openModal,typeFollow,disableBtnFollow}:Prosp) => {
+
+    const handleFollowers = () => {
+        openModal(true)
+        typeFollow({
+            follow: `followers/${user.uid}`,
+            name: 'Followers',
+            username: user.name
+        })
+    }
+    
+    const handleFollowings = () => {
+        openModal(true)
+        typeFollow({
+            follow: `following/${user.uid}`,
+            name: 'Followings',
+            username: user.name
+        })
+    }
+
+
   return (
     <View style={{position: 'relative'}}>
         <View
@@ -99,7 +121,7 @@ const BackgrundInformation = ({user,openModal}:Prosp) => {
                         gap: 30
                     }}>
                         <TouchableOpacity
-                            onPress={()=>openModal(true)}
+                            onPress={handleFollowings}
                         >
                             <Text style={{
                                 fontSize: 15,
@@ -117,7 +139,7 @@ const BackgrundInformation = ({user,openModal}:Prosp) => {
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            onPress={()=>openModal(true)}
+                            onPress={handleFollowers}
                         >
                             <Text style={{
                                 fontSize: 15,
@@ -130,29 +152,41 @@ const BackgrundInformation = ({user,openModal}:Prosp) => {
                             }}>{user?.nfollowers}</Text> Followers</Text>
                         </TouchableOpacity>
                     </View>
+                    
+                    {
 
-                    <Text>{user?.bio}</Text>
+                        user.bio
+                        &&
+                        user.bio?.length >= 1   
+                        &&
+                        <Text>{user?.bio}</Text>
+                    }
+                    
 
-
-                    <TouchableOpacity
-                        style={{
-                            flexDirection: 'row',
-                            gap: 10,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            backgroundColor: '#2F80ED',
-                            paddingVertical: 10,
-                            paddingHorizontal: 20,
-                            borderRadius: 5,
-                        }}
-                    >
-                        <Icon name='person-add' color="white" size={ 15 } />
-                        <Text style={{
-                            fontSize: 15,
-                            fontWeight: 'bold',
-                            color: 'white'
-                        }}>Follow</Text>
-                    </TouchableOpacity>
+                    {
+                        disableBtnFollow
+                        &&
+                        <TouchableOpacity
+                            style={{
+                                flexDirection: 'row',
+                                gap: 10,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                backgroundColor: '#2F80ED',
+                                paddingVertical: 10,
+                                paddingHorizontal: 20,
+                                borderRadius: 5,
+                            }}
+                        >
+                            <Icon name='person-add' color="white" size={ 15 } />
+                            <Text style={{
+                                fontSize: 15,
+                                fontWeight: 'bold',
+                                color: 'white'
+                            }}>Follow</Text>
+                        </TouchableOpacity>
+                    }
+                    
                     
                 </View>
 

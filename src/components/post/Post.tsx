@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {  View,  KeyboardAvoidingView, Platform, Text } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import Retweet from './Retweet';
 import Profile from '../Profile';
 import ImagePost from './ImagePost';
@@ -9,12 +8,28 @@ import Comments from './Comments';
 import PostActions from './PostActions';
 import InputPost from './InputPost';
 import { IPost } from '../../interface/postInterface';
+import { useForm } from '../../hooks/useForm';
+
 
 interface Props{
     post: IPost
 }
 
 const Post = ({post}:Props) => {
+
+    const [detailPost, setDetailPost] = useState({
+        likes: post.likes,
+        nLikes: post.nLikes,
+        comments: post.comentPeople,
+        nComments: post.nComentPeople,
+        retweet: post.retweets,
+        nRetweets: post.nRetweets,
+        saved: post.saved,
+        nSaved: post.nSaved
+    })
+    const [showInput, setShowInput] = useState(false)
+
+    
 
   return (
     <View style={{
@@ -47,7 +62,7 @@ const Post = ({post}:Props) => {
                 <View style={{
                     marginBottom: 10,
                 }}>
-                    <Profile user={post.userTweet}  />
+                    <Profile user={post.userTweet} dateTweet={post.date}  />
                 </View>
                 
                 <View
@@ -75,16 +90,27 @@ const Post = ({post}:Props) => {
 
                 {/* caracteristics post */}
                 <DetailPost 
-                    comments={post.nComentPeople} 
-                    retweets={post.nRetweets}
-                    saved={post.nSaved}
+                    comments={detailPost.nComments} 
+                    retweets={detailPost.nRetweets}
+                    likes={detailPost.nLikes}
+                    saved={detailPost.nSaved}
                 />
 
                 {/* interactive */}
-                <PostActions />
+                <PostActions
+                    idTweet={post.tid} 
+                    detailPost={detailPost} 
+                    setDetailPost={setDetailPost}
+                    setShowInput={setShowInput} 
+                    showInput={showInput} 
+                />
 
                 {/* input/image text */}
-                <InputPost />
+                {
+                    showInput
+                    &&
+                    <InputPost idTweet={post.tid} />
+                }               
                 
                 {/* comments */}
                 {

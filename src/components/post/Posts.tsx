@@ -25,6 +25,7 @@ const Posts = ({posts}:Props) => {
             ItemSeparatorComponent={()=>(
                 <View style={{padding:10}}></View>
             )}
+            showsVerticalScrollIndicator={false}
         />
     </View>          
   )
