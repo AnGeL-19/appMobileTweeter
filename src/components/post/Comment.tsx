@@ -5,6 +5,7 @@ import Profile from '../Profile';
 import { ComentPerson } from '../../interface/postInterface';
 import { usePostActions } from '../../hooks/usePostActions';
 import { AuthContext } from '../../context/auth/AuthProvider';
+import { dateFormat } from '../../helpers/dateFormat';
 
 interface Props{
     comment: ComentPerson
@@ -55,7 +56,7 @@ const Comment = ({comment}:Props) => {
 
                 <View style={styles.containerInfo}>
                     <Text style={styles.textUsername}>{comment.userComment.name}</Text>
-                    <Text style={styles.date}>25 agust at 2012</Text>
+                    <Text style={styles.date}>{dateFormat(comment.date)}</Text>
                 </View>
                 <View >
                     <Text style={styles.textInfo}>{comment.commentText}</Text>
