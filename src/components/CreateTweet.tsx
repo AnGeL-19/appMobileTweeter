@@ -57,6 +57,7 @@ const CreateTweet = () => {
                 placeholder='Insert description...'
                 style={{
                     flex:1,
+                    height: 100,
                     textAlignVertical:'top',
                     justifyContent: "flex-start", 
                     fontSize: 16,

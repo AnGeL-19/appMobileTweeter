@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const baseURL = 'https://app-tweet-backend-production.up.railway.app/api';
+const baseURL = 'https://app-tweet-backend-rf9s-dev.fl0.io/api';
 
 const tweeterApi = axios.create({ baseURL });
 
