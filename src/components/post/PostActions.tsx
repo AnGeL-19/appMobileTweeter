@@ -30,7 +30,7 @@ const PostActions = ({idTweet ,detailPost, setDetailPost ,showInput, setShowInpu
 
         actionTweet('like',{idTweet})       
 
-        if (!data.ok) return;
+        // if (!data.ok) return;
 
         const isUser = detailPost.likes.find( idUser => idUser === user?.uid )
 
@@ -56,7 +56,7 @@ const PostActions = ({idTweet ,detailPost, setDetailPost ,showInput, setShowInpu
 
         actionTweet('retweet',{idTweet})       
 
-        if (!data.ok) return;
+        // if (!data.ok) return;
 
         const isRetweet = detailPost.retweet.find( idUser => idUser === user?.uid )
 
@@ -79,9 +79,9 @@ const PostActions = ({idTweet ,detailPost, setDetailPost ,showInput, setShowInpu
     const handleSave = () => {
         console.log('retwwet');
 
-        actionTweet('save',{idTweet})       
+        actionTweet('save',{idTweet})
 
-        if (!data.ok) return;
+        // if (!data.ok) return;
 
         const isSaved = detailPost.saved.find( idUser => idUser === user?.uid )
 

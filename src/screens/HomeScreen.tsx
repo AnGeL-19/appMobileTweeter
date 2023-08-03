@@ -1,31 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, ActivityIndicator } from 'react-native';
 import Header from '../components/Header';
 import CreateTweet from '../components/CreateTweet';
 import Posts from '../components/post/Posts';
 import { IPost, PostsResponse } from '../interface/postInterface';
 import tweeterApi from '../api/apiTweeter';
+import { usePost } from '../hooks/usePost';
 
 const HomeScreen = () => {
 
-  
-  const [data, setdata] = useState<IPost[]>([])
-
-    async function getTweets(){
-        try {
-            const resp = await tweeterApi.get<PostsResponse>('tweets/')
-            console.log(resp.data.data);
-            setdata(resp.data.data)
-        } catch (error) {
-            console.log(error);
-            
-        }
-        
-        
-    }
+  const { data, getTweets, isLoading } = usePost()
 
     useEffect(()=>{
-      getTweets()
+      getTweets({})
       console.log('entraaaaa');
       
     },[])
@@ -40,7 +27,12 @@ const HomeScreen = () => {
         
         <CreateTweet />
 
-        <Posts posts={data} />
+        {
+          isLoading
+          ? <ActivityIndicator size={'large'} color={'black'} />
+          : <Posts posts={data} />
+        }
+        
         
       </ScrollView>
     </View>

@@ -7,21 +7,22 @@ interface Filter {
     name: string;
     status: boolean;
     text: string;
+    url: string;
 }
 
 interface Props {
-    filters: Array<Filter>
-
+    filters: Array<Filter>;
+    getTweets: ({url,id}:{url?: string, id?: string}) => void;
 }
 
-const FilterTweets = ({filters}: Props) => {
+const FilterTweets = ({filters,getTweets}: Props) => {
 
     const [values, setValues] = useState(filters)
 
     const handleSelectOptions = (value: Filter) => {
 
         console.log(value);
-
+        
         setValues(values.map(f => {
             if (f.name === value.name) {
                 return {
@@ -35,6 +36,9 @@ const FilterTweets = ({filters}: Props) => {
                 }
              }
         }));
+        if (value.url.trim().length !== 0) {
+            getTweets({url: value.url})
+        }
         
     }
 

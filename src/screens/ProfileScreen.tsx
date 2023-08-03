@@ -38,10 +38,10 @@ const ProfileScreen = ({route}:Props) => {
         
         if (route.params?.id && route.params?.id !== user?.uid) {
             getUser(route.params?.id)
-            getTweets(route.params?.id)
+            getTweets({id: route.params?.id})
         }else{
             setUserData(userAuth!)
-            getTweets(userAuth?.uid!)
+            getTweets({id:userAuth?.uid!})
         }
     },[route.params?.id])
 

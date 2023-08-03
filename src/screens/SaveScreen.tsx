@@ -1,34 +1,49 @@
-import React from 'react'
-import { ScrollView, Text, View } from 'react-native'
+import React, { useEffect } from 'react'
+import { ScrollView, Text, View, ActivityIndicator } from 'react-native';
 import Header from '../components/Header'
 import Posts from '../components/post/Posts'
 import FilterTweets from '../components/profile/FilterTweets'
+import { usePost } from '../hooks/usePost'
 
 const SaveScreen = () => {
 
+  const { data, getTweets, isLoading } = usePost()
+
+    useEffect(()=>{
+      getTweets({url: '/saved'})
+      console.log('entraaaaa');
+      
+    },[])
 
   const filter = [
     {
         name: 'tweets',
         status: true,
-        text: 'Tweets'
+        text: 'Tweets',
+        url: `/saved`,
     },
     {
         name: 'tweetsReplies',
         status: false,
-        text: 'Tweets & Replies'
+        text: 'Tweets & Replies',
+        url: '',
     },
     {
         name: 'media',
         status: false,
-        text: 'Media'
+        text: 'Media',
+        url: '',
     },
     {
         name: 'likes',
         status: false,
-        text: 'Likes'
+        text: 'Likes',
+        url: `/liked`,
     },
 ]
+
+
+
 
   return (
     <View style={{
@@ -40,9 +55,14 @@ const SaveScreen = () => {
         showsVerticalScrollIndicator={false}
       >
       <View style={{marginTop: 80}}></View>
-      <FilterTweets filters={filter} />
+      <FilterTweets filters={filter} getTweets={getTweets} />
 
-      {/* <Posts /> */}
+      {
+        isLoading
+        ? <ActivityIndicator size={'small'} color='black' />
+        : <Posts posts={data} />
+      }
+      
 
       </ScrollView>
     </View>
