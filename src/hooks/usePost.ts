@@ -16,6 +16,7 @@ export const usePost = () => {
         try {
 
             setIsLoading(true)
+            setdata([])
             const resp = await tweeterApi.get<PostsResponse>(`tweets/${url}${id}`)
             console.log(resp.data.data);
             setdata(resp.data.data)

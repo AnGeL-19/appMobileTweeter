@@ -36,6 +36,8 @@ const FilterTweets = ({filters,getTweets}: Props) => {
                 }
              }
         }));
+        console.log(value);
+        
         if (value.url.trim().length !== 0) {
             getTweets({url: value.url})
         }

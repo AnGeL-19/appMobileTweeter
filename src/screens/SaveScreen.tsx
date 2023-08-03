@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { ScrollView, Text, View, ActivityIndicator } from 'react-native';
+import { ScrollView, Text, View, ActivityIndicator, SafeAreaView } from 'react-native';
 import Header from '../components/Header'
 import Posts from '../components/post/Posts'
 import FilterTweets from '../components/profile/FilterTweets'
@@ -46,26 +46,27 @@ const SaveScreen = () => {
 
 
   return (
-    <View style={{
-        // flex: 1,
-        // marginTop: 70
-    }}>
+    <SafeAreaView style={{flex: 1}}>
       <Header />
-      <ScrollView 
-        showsVerticalScrollIndicator={false}
-      >
-      <View style={{marginTop: 80}}></View>
-      <FilterTweets filters={filter} getTweets={getTweets} />
 
+      {/* 
       {
         isLoading
         ? <ActivityIndicator size={'small'} color='black' />
-        : <Posts posts={data} />
-      }
+        : 
+      } */}
+        <Posts posts={data} 
+        isLoading={isLoading}
+        headerComponents={
+        <>
+        <View style={{marginTop: 80}}></View>
+        <FilterTweets filters={filter} getTweets={getTweets} />
+        </>}/>
+     
       
 
-      </ScrollView>
-    </View>
+
+    </SafeAreaView>
   )
 }
 

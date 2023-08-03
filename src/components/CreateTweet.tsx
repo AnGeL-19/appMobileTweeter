@@ -18,7 +18,8 @@ const CreateTweet = () => {
         width: '100%',
         paddingHorizontal: 10,
         marginBottom: 20,
-        zIndex: 999
+        position: 'relative',
+        zIndex: 99
     }}>
         <View
             style={{

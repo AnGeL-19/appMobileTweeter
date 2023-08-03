@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, ScrollView, ActivityIndicator } from 'react-native';
+import { View, ScrollView, ActivityIndicator, SafeAreaView } from 'react-native';
 import Header from '../components/Header';
 import CreateTweet from '../components/CreateTweet';
 import Posts from '../components/post/Posts';
@@ -18,24 +18,13 @@ const HomeScreen = () => {
     },[])
 
   return (
-    <View>
+    <SafeAreaView style={{flex: 1}}>
       <Header />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={{marginTop: 80}}></View>
-        
-        <CreateTweet />
 
-        {
-          isLoading
-          ? <ActivityIndicator size={'large'} color={'black'} />
-          : <Posts posts={data} />
-        }
-        
-        
-      </ScrollView>
-    </View>
+        <Posts posts={data} headerComponents={<><View style={{marginTop: 80}}></View><CreateTweet /></>} isLoading />
+      
+             
+    </SafeAreaView>
   )
 }
 
