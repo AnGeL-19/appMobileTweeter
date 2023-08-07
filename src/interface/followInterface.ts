@@ -6,10 +6,18 @@ export interface FollowResponse {
     data: IUserFollow[];
 }
 
+export interface IUsersResponse {
+    ok:   boolean;
+    length: number,
+    data: IUserFollow[];
+}
+
+
 export interface IUserFollow {
     name:      string;
     bio:       string;
     imgUser:   string;
+    imgUserBackground?: string;
     followers: string[];
     uid:       string;
 }

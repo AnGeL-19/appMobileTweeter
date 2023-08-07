@@ -8,21 +8,22 @@ interface Filter {
     status: boolean;
     text: string;
     url: string;
+    available?: boolean;
 }
 
 interface Props {
     filters: Array<Filter>;
-    getTweets: ({url,id}:{url?: string, id?: string}) => void;
+    getTweets?: ({url,id}:{url?: string, id?: string}) => void;
+    getUsers?: (url: string) => void;
+    setPeople?: (value: boolean) => void; 
 }
 
-const FilterTweets = ({filters,getTweets}: Props) => {
+const FilterTweets = ({filters,getTweets = () => {}, getUsers = () => {},setPeople = () => {}}: Props) => {
 
     const [values, setValues] = useState(filters)
 
     const handleSelectOptions = (value: Filter) => {
-
-        console.log(value);
-        
+ 
         setValues(values.map(f => {
             if (f.name === value.name) {
                 return {
@@ -36,9 +37,15 @@ const FilterTweets = ({filters,getTweets}: Props) => {
                 }
              }
         }));
-        console.log(value);
+
+        if (!value.available) {
+            setPeople(true)
+            getUsers(value.url)
+            return;
+        }
         
         if (value.url.trim().length !== 0) {
+            setPeople(false)
             getTweets({url: value.url})
         }
         

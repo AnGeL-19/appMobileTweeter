@@ -10,16 +10,16 @@ interface Props{
 export const usePost = () => {
 
     const [isLoading, setIsLoading] = useState(true)
-    const [data, setdata] = useState<IPost[]>([])
+    const [data, setData] = useState<IPost[]>([])
 
     async function getTweets({id='', url=''}:Props){
         try {
 
             setIsLoading(true)
-            setdata([])
+            setData([])
             const resp = await tweeterApi.get<PostsResponse>(`tweets/${url}${id}`)
-            console.log(resp.data.data);
-            setdata(resp.data.data)
+            // console.log(resp.data.data);
+            setData(resp.data.data)
             setIsLoading(false)
 
         } catch (error) {
@@ -33,6 +33,7 @@ export const usePost = () => {
     return {
         getTweets,
         isLoading,
-        data
+        data,
+        setData
     }
 }
